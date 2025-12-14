@@ -804,7 +804,6 @@ async function loadSettings() {
     // Hero Banner
     document.getElementById('heroTitle').value = settings.heroTitle || '';
     document.getElementById('heroSubtitle').value = settings.heroSubtitle || '';
-    document.getElementById('heroDescription').value = settings.heroDescription || '';
     if (settings.heroImage) {
       document.getElementById('heroImagePreview').innerHTML = `<img src="${settings.heroImage}" style="max-width:300px;border-radius:8px">`;
     }
@@ -861,7 +860,6 @@ async function saveSettings(e) {
     // Hero Banner
     heroTitle: document.getElementById('heroTitle').value,
     heroSubtitle: document.getElementById('heroSubtitle').value,
-    heroDescription: document.getElementById('heroDescription').value,
     heroImage: settings.heroImage || '',
     
     // Floating Buttons
