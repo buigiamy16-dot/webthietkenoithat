@@ -664,6 +664,19 @@ app.post('/api/upload/company', upload.single('companyImage'), async (req, res) 
   }
 });
 
+app.post('/api/upload', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'No file' });
+    const seoFilename = createSEOFilename(req.file.originalname, 'product');
+    const outputPath = `./uploads/${seoFilename}`;
+    await sharp(req.file.path).resize(800, 800, { fit: 'inside' }).jpeg({ quality: 85 }).toFile(outputPath);
+    await fs.unlink(req.file.path);
+    res.json({ url: `/uploads/${seoFilename}` });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.use((req, res) => {
   res.status(404).render('404', {
     title: 'Không tìm thấy trang - 404',

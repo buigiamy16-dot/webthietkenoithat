@@ -1004,3 +1004,19 @@ document.getElementById('categoryImage')?.addEventListener('change', async (e) =
   } catch (err) { showToast('Lỗi upload', 'error'); }
 });
 
+document.getElementById('companyImage')?.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const formData = new FormData();
+  formData.append('companyImage', file);
+  try {
+    const res = await fetch('/api/upload/company', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.path) {
+      settings.companyImage = data.path;
+      document.getElementById('companyImagePreview').innerHTML = `<img src="${data.path}" style="max-width:250px;border-radius:8px">`;
+      showToast('Upload ảnh công ty OK', 'success');
+    }
+  } catch (err) { showToast('Lỗi upload', 'error'); }
+});
+
