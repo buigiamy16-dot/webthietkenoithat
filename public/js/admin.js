@@ -792,53 +792,68 @@ async function loadSettings() {
   try {
     const res = await fetch('/api/settings');
     settings = await res.json();
-    
+
+    const setValue = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.value = value || '';
+    };
+
+    const setChecked = (id, checked) => {
+      const el = document.getElementById(id);
+      if (el) el.checked = checked || false;
+    };
+
+    const setHTML = (id, html) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = html;
+    };
+
     // Basic SEO
-    document.getElementById('siteTitle').value = settings.siteTitle || '';
-    document.getElementById('siteDescription').value = settings.siteDescription || '';
-    document.getElementById('keywords').value = settings.keywords || '';
-    document.getElementById('email').value = settings.email || '';
-    document.getElementById('phone').value = settings.phone || '';
-    document.getElementById('address').value = settings.address || '';
-    
+    setValue('siteTitle', settings.siteTitle);
+    setValue('siteDescription', settings.siteDescription);
+    setValue('keywords', settings.keywords);
+    setValue('email', settings.email);
+    setValue('phone', settings.phone);
+    setValue('address', settings.address);
+
     // Hero Banner
-    document.getElementById('heroTitle').value = settings.heroTitle || '';
-    document.getElementById('heroSubtitle').value = settings.heroSubtitle || '';
+    setValue('heroTitle', settings.heroTitle);
+    setValue('heroSubtitle', settings.heroSubtitle);
     if (settings.heroImage) {
-      document.getElementById('heroImagePreview').innerHTML = `<img src="${settings.heroImage}" style="max-width:300px;border-radius:8px">`;
+      setHTML('heroImagePreview', `<img src="${settings.heroImage}" style="max-width:300px;border-radius:8px">`);
     }
-    
+
     // Floating Buttons
-    document.getElementById('showFloatingButtons').checked = settings.showFloatingButtons || false;
-    document.getElementById('floatingPhone').value = settings.floatingPhone || '';
-    document.getElementById('floatingZalo').value = settings.floatingZalo || '';
-    document.getElementById('floatingFacebook').value = settings.floatingFacebook || '';
-    
+    setChecked('showFloatingButtons', settings.showFloatingButtons);
+    setValue('floatingPhone', settings.floatingPhone);
+    setValue('floatingZalo', settings.floatingZalo);
+    setValue('floatingFacebook', settings.floatingFacebook);
+
     // Icons Preview
     if (settings.phoneIcon) {
-      document.getElementById('phoneIconPreview').innerHTML = `<img src="${settings.phoneIcon}" style="width:64px;height:64px;border-radius:8px">`;
+      setHTML('phoneIconPreview', `<img src="${settings.phoneIcon}" style="width:64px;height:64px;border-radius:8px">`);
     }
     if (settings.zaloIcon) {
-      document.getElementById('zaloIconPreview').innerHTML = `<img src="${settings.zaloIcon}" style="width:64px;height:64px;border-radius:8px">`;
+      setHTML('zaloIconPreview', `<img src="${settings.zaloIcon}" style="width:64px;height:64px;border-radius:8px">`);
     }
     if (settings.facebookIcon) {
-      document.getElementById('facebookIconPreview').innerHTML = `<img src="${settings.facebookIcon}" style="width:64px;height:64px;border-radius:8px">`;
+      setHTML('facebookIconPreview', `<img src="${settings.facebookIcon}" style="width:64px;height:64px;border-radius:8px">`);
     }
-    
+
     // Footer Contact
-    document.getElementById('officeAddress').value = settings.officeAddress || '';
-    document.getElementById('workingHours').value = settings.workingHours || '';
-    document.getElementById('mapLink').value = settings.mapLink || '';
-    document.getElementById('staff1Name').value = settings.staff1Name || '';
-    document.getElementById('staff1Title').value = settings.staff1Title || '';
-    document.getElementById('staff1Phone').value = settings.staff1Phone || '';
-    document.getElementById('staff2Name').value = settings.staff2Name || '';
-    document.getElementById('staff2Title').value = settings.staff2Title || '';
-    document.getElementById('staff2Phone').value = settings.staff2Phone || '';
+    setValue('officeAddress', settings.officeAddress);
+    setValue('workingHours', settings.workingHours);
+    setValue('mapLink', settings.mapLink);
+    setValue('staff1Name', settings.staff1Name);
+    setValue('staff1Title', settings.staff1Title);
+    setValue('staff1Phone', settings.staff1Phone);
+    setValue('staff2Name', settings.staff2Name);
+    setValue('staff2Title', settings.staff2Title);
+    setValue('staff2Phone', settings.staff2Phone);
     if (settings.companyImage) {
-      document.getElementById('companyImagePreview').innerHTML = `<img src="${settings.companyImage}" style="max-width:250px;border-radius:8px">`;
+      setHTML('companyImagePreview', `<img src="${settings.companyImage}" style="max-width:250px;border-radius:8px">`);
     }
-    
+
   } catch (error) {
     console.error('Error loading settings:', error);
     showToast('Lỗi tải cài đặt', 'error');
@@ -847,42 +862,52 @@ async function loadSettings() {
 
 async function saveSettings(e) {
   e.preventDefault();
-  
+
+  const getValue = (id) => {
+    const el = document.getElementById(id);
+    return el ? el.value : '';
+  };
+
+  const getChecked = (id) => {
+    const el = document.getElementById(id);
+    return el ? el.checked : false;
+  };
+
   const updatedSettings = {
     // Basic SEO
-    siteTitle: document.getElementById('siteTitle').value,
-    siteDescription: document.getElementById('siteDescription').value,
-    keywords: document.getElementById('keywords').value,
-    email: document.getElementById('email').value,
-    phone: document.getElementById('phone').value,
-    address: document.getElementById('address').value,
-    
+    siteTitle: getValue('siteTitle'),
+    siteDescription: getValue('siteDescription'),
+    keywords: getValue('keywords'),
+    email: getValue('email'),
+    phone: getValue('phone'),
+    address: getValue('address'),
+
     // Hero Banner
-    heroTitle: document.getElementById('heroTitle').value,
-    heroSubtitle: document.getElementById('heroSubtitle').value,
+    heroTitle: getValue('heroTitle'),
+    heroSubtitle: getValue('heroSubtitle'),
     heroImage: settings.heroImage || '',
-    
+
     // Floating Buttons
-    showFloatingButtons: document.getElementById('showFloatingButtons').checked,
-    floatingPhone: document.getElementById('floatingPhone').value,
-    floatingZalo: document.getElementById('floatingZalo').value,
-    floatingFacebook: document.getElementById('floatingFacebook').value,
+    showFloatingButtons: getChecked('showFloatingButtons'),
+    floatingPhone: getValue('floatingPhone'),
+    floatingZalo: getValue('floatingZalo'),
+    floatingFacebook: getValue('floatingFacebook'),
     phoneIcon: settings.phoneIcon || '',
     zaloIcon: settings.zaloIcon || '',
     facebookIcon: settings.facebookIcon || '',
-    
+
     // Footer Contact
     companyImage: settings.companyImage || '',
-    officeAddress: document.getElementById('officeAddress').value,
-    workingHours: document.getElementById('workingHours').value,
-    mapLink: document.getElementById('mapLink').value,
-    staff1Name: document.getElementById('staff1Name').value,
-    staff1Title: document.getElementById('staff1Title').value,
-    staff1Phone: document.getElementById('staff1Phone').value,
-    staff2Name: document.getElementById('staff2Name').value,
-    staff2Title: document.getElementById('staff2Title').value,
-    staff2Phone: document.getElementById('staff2Phone').value,
-    
+    officeAddress: getValue('officeAddress'),
+    workingHours: getValue('workingHours'),
+    mapLink: getValue('mapLink'),
+    staff1Name: getValue('staff1Name'),
+    staff1Title: getValue('staff1Title'),
+    staff1Phone: getValue('staff1Phone'),
+    staff2Name: getValue('staff2Name'),
+    staff2Title: getValue('staff2Title'),
+    staff2Phone: getValue('staff2Phone'),
+
     // Keep old fields
     author: settings.author || 'Nội Thất Cao Cấp',
     logo: settings.logo || '/images/logo.png'
