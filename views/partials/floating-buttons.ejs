@@ -1,0 +1,22 @@
+<!-- Nút liên hệ nổi -->
+<% if (settings?.showFloatingButtons) { %>
+<div class="floating-contact">
+  <% if (settings.floatingPhone) { %>
+  <a href="tel:<%= settings.floatingPhone %>" class="floating-btn phone" title="Gọi điện">
+    📞
+  </a>
+  <% } %>
+  
+  <% if (settings.floatingZalo) { %>
+  <a href="https://zalo.me/<%= settings.floatingZalo %>" target="_blank" class="floating-btn zalo" title="Chat Zalo">
+    💬
+  </a>
+  <% } %>
+  
+  <% if (settings.floatingFacebook) { %>
+  <a href="<%= settings.floatingFacebook %>" target="_blank" class="floating-btn facebook" title="Facebook">
+    👍
+  </a>
+  <% } %>
+</div>
+<% } %>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <meta name="description" content="<%= description %>">
+  <meta name="keywords" content="<%= keywords %>">
+  <link rel="canonical" href="<%= canonicalUrl %>">
+  
+  <meta property="og:title" content="<%= title %>">
+  <meta property="og:description" content="<%= description %>">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="<%= canonicalUrl %>">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "<%= category.name %>",
+    "description": "<%= description %>",
+    "url": "<%= canonicalUrl %>"
+  }
+  </script>
+</head>
+<body>
+  <%- include('partials/header', { categories, currentPath }) %>
+
+  <main>
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a href="/">Trang chủ</a>
+        <span>/</span>
+        <span class="current"><%= category.name %></span>
+      </nav>
+
+      <div class="category-header">
+        <h1><%= category.name %></h1>
+        <% if (category.description) { %>
+          <p class="category-description"><%= category.description %></p>
+        <% } %>
+        <p class="product-count"><%= products.length %> sản phẩm</p>
+      </div>
+
+      <% if (products.length > 0) { %>
+        <div class="product-grid">
+          <% products.forEach(product => { %>
+            <article class="product-card">
+              <a href="/san-pham/<%= product.slug %>">
+                <div class="product-image">
+                  <img src="<%= product.images?.[0] || '/images/placeholder.jpg' %>" 
+                       alt="<%= product.name %>"
+                       loading="lazy"
+                       width="300"
+                       height="300">
+                  <% if (product.isNew) { %>
+                    <span class="badge badge-new">Mới</span>
+                  <% } %>
+                  <% if (product.discount) { %>
+                    <span class="badge badge-sale">-<%= product.discount %>%</span>
+                  <% } %>
+                </div>
+                <div class="product-info">
+                  <h3><%= product.name %></h3>
+                  <div class="product-price">
+                    <span class="price"><%= product.price?.toLocaleString('vi-VN') || '0' %>đ</span>
+                    <% if (product.oldPrice && product.oldPrice > product.price) { %>
+                      <span class="old-price"><%= product.oldPrice.toLocaleString('vi-VN') %>đ</span>
+                    <% } %>
+                  </div>
+                  <% if (product.description) { %>
+                    <p class="product-desc"><%= product.description.substring(0, 60) %>...</p>
+                  <% } %>
+                </div>
+              </a>
+            </article>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="no-products">
+          <p>Danh mục này chưa có sản phẩm. Vui lòng quay lại sau!</p>
+          <a href="/" class="btn-primary">Về trang chủ</a>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+  
+  <script src="/js/main.js"></script>
+</body>
+</html>

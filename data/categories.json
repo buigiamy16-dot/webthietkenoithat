@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "name": "Phòng Khách",
+    "slug": "phong-khach",
+    "description": "Nội thất phòng khách cao cấp: Sofa, bàn trà, kệ tivi, tủ trang trí",
+    "icon": ""
+  },
+  {
+    "id": "2",
+    "name": "Phòng Ngủ",
+    "slug": "phong-ngu",
+    "description": "Giường ngủ, tủ quần áo, bàn trang điểm, tab đầu giường",
+    "icon": ""
+  },
+  {
+    "id": "3",
+    "name": "Phòng Ăn",
+    "slug": "phong-an",
+    "description": "Bàn ăn, ghế ăn, tủ bếp, kệ trưng bày",
+    "icon": ""
+  },
+  {
+    "id": "4",
+    "name": "Phòng Làm Việc",
+    "slug": "phong-lam-viec",
+    "description": "Bàn làm việc, ghế văn phòng, tủ hồ sơ, kệ sách",
+    "icon": ""
+  }
+]

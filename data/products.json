@@ -1,0 +1,100 @@
+[
+  {
+    "id": "1",
+    "name": "Sofa Góc Hiện Đại",
+    "slug": "sofa-goc-hien-dai",
+    "description": "Sofa góc L chữ L thiết kế hiện đại, chất liệu da cao cấp, sang trọng và đẳng cấp. Phù hợp cho phòng khách rộng rãi. Khung gỗ tự nhiên chắc chắn, đệm mút cao cấp D40 êm ái.",
+    "shortDescription": "Sofa góc L thiết kế hiện đại, da cao cấp",
+    "price": 15000000,
+    "oldPrice": 18000000,
+    "discount": 17,
+    "categoryId": "1",
+    "images": [
+      "/uploads/sofa-1.jpg"
+    ],
+    "sku": "SF001",
+    "isNew": true,
+    "tags": ["sofa", "phòng khách", "hiện đại", "da thật"],
+    "features": [
+      "Chất liệu da bò thật 100%",
+      "Khung gỗ tự nhiên chắc chắn",
+      "Đệm mút cao cấp D40",
+      "Kích thước: 280x180x85cm",
+      "Bảo hành 3 năm"
+    ],
+    "specifications": {
+      "Kích thước": "280 x 180 x 85 cm",
+      "Chất liệu": "Da bò thật, gỗ tự nhiên",
+      "Màu sắc": "Nâu, Đen, Trắng",
+      "Xuất xứ": "Việt Nam",
+      "Bảo hành": "3 năm"
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "name": "Giường Ngủ Gỗ Sồi",
+    "slug": "giuong-ngu-go-soi",
+    "description": "Giường ngủ gỗ sồi Nga cao cấp, thiết kế tân cổ điển sang trọng. Đầu giường chạm khắc tinh xảo, bền đẹp theo thời gian. Phù hợp cho phòng ngủ master.",
+    "shortDescription": "Giường gỗ sồi Nga, tân cổ điển sang trọng",
+    "price": 12000000,
+    "oldPrice": null,
+    "categoryId": "2",
+    "images": [
+      "/uploads/bed-1.jpg"
+    ],
+    "sku": "BD001",
+    "isNew": false,
+    "tags": ["giường", "phòng ngủ", "gỗ sồi", "tân cổ điển"],
+    "features": [
+      "Gỗ sồi Nga tự nhiên",
+      "Thiết kế tân cổ điển",
+      "Chạm khắc thủ công",
+      "Kích thước: 1.8m x 2m",
+      "Bảo hành 5 năm"
+    ],
+    "specifications": {
+      "Kích thước": "180 x 200 x 120 cm",
+      "Chất liệu": "Gỗ sồi Nga tự nhiên",
+      "Màu sắc": "Vàng sồi, Nâu óc chó",
+      "Xuất xứ": "Việt Nam",
+      "Bảo hành": "5 năm"
+    },
+    "createdAt": "2025-01-02T00:00:00.000Z",
+    "updatedAt": "2025-01-02T00:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "name": "Bàn Ăn Mặt Đá",
+    "slug": "ban-an-mat-da",
+    "description": "Bàn ăn 6 ghế mặt đá marble tự nhiên, chân sắt sơn tĩnh điện. Thiết kế sang trọng, dễ vệ sinh. Ghế bọc nệm da PU cao cấp.",
+    "shortDescription": "Bàn ăn 6 ghế, mặt đá marble tự nhiên",
+    "price": 8500000,
+    "oldPrice": 10000000,
+    "discount": 15,
+    "categoryId": "3",
+    "images": [
+      "/uploads/table-1.jpg"
+    ],
+    "sku": "TB001",
+    "isNew": true,
+    "tags": ["bàn ăn", "phòng ăn", "đá marble", "6 ghế"],
+    "features": [
+      "Mặt đá marble tự nhiên",
+      "Chân sắt sơn tĩnh điện",
+      "Bộ 1 bàn + 6 ghế",
+      "Kích thước: 1.6m x 0.9m",
+      "Bảo hành 2 năm"
+    ],
+    "specifications": {
+      "Kích thước bàn": "160 x 90 x 75 cm",
+      "Chất liệu": "Đá marble, sắt",
+      "Số ghế": "6 ghế",
+      "Màu sắc": "Trắng, Đen, Xám",
+      "Bảo hành": "2 năm"
+    },
+    "createdAt": "2025-01-03T00:00:00.000Z",
+    "updatedAt": "2025-01-03T00:00:00.000Z"
+  }
+]

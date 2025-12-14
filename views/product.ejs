@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <meta name="description" content="<%= description %>">
+  <meta name="keywords" content="<%= keywords %>">
+  <link rel="canonical" href="<%= canonicalUrl %>">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="<%= title %>">
+  <meta property="og:description" content="<%= description %>">
+  <meta property="og:type" content="product">
+  <meta property="og:url" content="<%= canonicalUrl %>">
+  <% if (product.images && product.images[0]) { %>
+  <meta property="og:image" content="<%= product.images[0] %>">
+  <% } %>
+  <meta property="product:price:amount" content="<%= product.price %>">
+  <meta property="product:price:currency" content="VND">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= title %>">
+  <meta name="twitter:description" content="<%= description %>">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <!-- Schema.org Product -->
+  <script type="application/ld+json">
+  <%- JSON.stringify(structuredData) %>
+  </script>
+  
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Trang chủ",
+        "item": "<%= canonicalUrl.split('/san-pham')[0] %>"
+      },
+      <% if (category) { %>
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "<%= category.name %>",
+        "item": "<%= canonicalUrl.split('/san-pham')[0] %>/danh-muc/<%= category.slug %>"
+      },
+      <% } %>
+      {
+        "@type": "ListItem",
+        "position": <%= category ? 3 : 2 %>,
+        "name": "<%= product.name %>"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <%- include('partials/header', { categories, currentPath }) %>
+
+  <main class="product-detail">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="/">Trang chủ</a>
+        <% if (category) { %>
+          <span>/</span>
+          <a href="/danh-muc/<%= category.slug %>"><%= category.name %></a>
+        <% } %>
+        <span>/</span>
+        <span class="current"><%= product.name %></span>
+      </nav>
+
+      <div class="product-layout">
+        <!-- Product Images -->
+        <div class="product-images">
+          <div class="main-image">
+            <img src="<%= product.images?.[0] || '/images/placeholder.jpg' %>" 
+                 alt="<%= product.name %>" 
+                 id="mainImage"
+                 width="600"
+                 height="600">
+            <% if (product.isNew) { %>
+              <span class="badge badge-new">Mới</span>
+            <% } %>
+            <% if (product.discount) { %>
+              <span class="badge badge-sale">-<%= product.discount %>%</span>
+            <% } %>
+          </div>
+          <% if (product.images && product.images.length > 1) { %>
+          <div class="thumbnail-images">
+            <% product.images.forEach((img, index) => { %>
+              <img src="<%= img %>" 
+                   alt="<%= product.name %> - Ảnh <%= index + 1 %>"
+                   class="thumbnail <%= index === 0 ? 'active' : '' %>"
+                   onclick="changeImage(this.src)"
+                   width="100"
+                   height="100"
+                   loading="lazy">
+            <% }) %>
+          </div>
+          <% } %>
+        </div>
+
+        <!-- Product Info -->
+        <div class="product-content">
+          <h1><%= product.name %></h1>
+          
+          <% if (product.sku) { %>
+            <p class="product-sku">Mã SP: <strong><%= product.sku %></strong></p>
+          <% } %>
+          
+          <div class="product-price-box">
+            <span class="price"><%= product.price?.toLocaleString('vi-VN') || '0' %>đ</span>
+            <% if (product.oldPrice && product.oldPrice > product.price) { %>
+              <span class="old-price"><%= product.oldPrice.toLocaleString('vi-VN') %>đ</span>
+              <span class="discount">-<%= Math.round((1 - product.price/product.oldPrice) * 100) %>%</span>
+            <% } %>
+          </div>
+
+          <% if (product.shortDescription) { %>
+          <div class="product-short-desc">
+            <p><%= product.shortDescription %></p>
+          </div>
+          <% } %>
+
+          <div class="product-actions">
+            <button class="btn-primary btn-large" onclick="contact('buy')">
+              🛒 Mua ngay
+            </button>
+            <button class="btn-secondary btn-large" onclick="contact('consult')">
+              💬 Tư vấn
+            </button>
+          </div>
+
+          <!-- Product Features -->
+          <% if (product.features && product.features.length > 0) { %>
+          <div class="product-features">
+            <h3>Đặc điểm nổi bật</h3>
+            <ul>
+              <% product.features.forEach(feature => { %>
+                <li>✓ <%= feature %></li>
+              <% }) %>
+            </ul>
+          </div>
+          <% } %>
+
+          <!-- Product Meta -->
+          <div class="product-meta">
+            <% if (category) { %>
+              <p><strong>Danh mục:</strong> <a href="/danh-muc/<%= category.slug %>"><%= category.name %></a></p>
+            <% } %>
+            <% if (product.tags && product.tags.length > 0) { %>
+              <div class="product-tags">
+                <strong>Tags:</strong>
+                <% product.tags.forEach(tag => { %>
+                  <span class="tag"><%= tag %></span>
+                <% }) %>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Description -->
+      <div class="product-full-description">
+        <div class="tabs">
+          <button class="tab-btn active" onclick="showTab('description')">Mô tả chi tiết</button>
+          <% if (product.specifications) { %>
+            <button class="tab-btn" onclick="showTab('specs')">Thông số kỹ thuật</button>
+          <% } %>
+          <button class="tab-btn" onclick="showTab('shipping')">Vận chuyển & Bảo hành</button>
+        </div>
+
+        <div class="tab-content active" id="description">
+          <h2>Mô tả sản phẩm</h2>
+          <% if (product.description) { %>
+            <p><%= product.description %></p>
+          <% } else { %>
+            <p>Thông tin chi tiết về sản phẩm đang được cập nhật.</p>
+          <% } %>
+        </div>
+
+        <% if (product.specifications) { %>
+        <div class="tab-content" id="specs">
+          <h2>Thông số kỹ thuật</h2>
+          <table class="specs-table">
+            <tbody>
+              <% Object.entries(product.specifications).forEach(([key, value]) => { %>
+                <tr>
+                  <th><%= key %></th>
+                  <td><%= value %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+        <% } %>
+
+        <div class="tab-content" id="shipping">
+          <h2>Chính sách vận chuyển & Bảo hành</h2>
+          <h3>🚚 Vận chuyển</h3>
+          <ul>
+            <li>Miễn phí vận chuyển cho đơn hàng trên 5 triệu đồng</li>
+            <li>Giao hàng toàn quốc trong 3-7 ngày</li>
+            <li>Hỗ trợ lắp đặt tận nhà</li>
+          </ul>
+          <h3>🔧 Bảo hành</h3>
+          <ul>
+            <li>Bảo hành chính hãng từ 1-5 năm</li>
+            <li>Đổi trả trong 7 ngày nếu có lỗi từ nhà sản xuất</li>
+            <li>Hỗ trợ sửa chữa, bảo trì trọn đời sản phẩm</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Related Products -->
+      <% if (relatedProducts && relatedProducts.length > 0) { %>
+      <section class="related-products">
+        <h2>Sản phẩm liên quan</h2>
+        <div class="product-grid">
+          <% relatedProducts.forEach(product => { %>
+            <article class="product-card">
+              <a href="/san-pham/<%= product.slug %>">
+                <div class="product-image">
+                  <img src="<%= product.images?.[0] || '/images/placeholder.jpg' %>" 
+                       alt="<%= product.name %>"
+                       loading="lazy"
+                       width="300"
+                       height="300">
+                </div>
+                <div class="product-info">
+                  <h3><%= product.name %></h3>
+                  <p class="product-price"><%= product.price?.toLocaleString('vi-VN') || '0' %>đ</p>
+                </div>
+              </a>
+            </article>
+          <% }) %>
+        </div>
+      </section>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+  
+  <script src="/js/main.js"></script>
+  <script>
+    function changeImage(src) {
+      document.getElementById('mainImage').src = src;
+      document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function contact(type) {
+      const productName = '<%= product.name %>';
+      const message = type === 'buy' 
+        ? `Tôi muốn mua sản phẩm: ${productName}` 
+        : `Tôi cần tư vấn về sản phẩm: ${productName}`;
+      
+      // Có thể thay bằng link Zalo, Messenger hoặc form
+      const phone = '0123456789';
+      window.open(`tel:${phone}`, '_self');
+      // Hoặc: window.open(`https://zalo.me/${phone}?text=${encodeURIComponent(message)}`);
+    }
+  </script>
+</body>
+</html>

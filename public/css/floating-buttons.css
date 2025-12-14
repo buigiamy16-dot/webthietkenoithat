@@ -1,0 +1,127 @@
+/* Nút liên hệ nổi - Floating Contact Buttons */
+.floating-contact {
+  position: fixed;
+  right: 20px;
+  bottom: 100px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.floating-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  font-size: 28px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+.floating-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.floating-btn.phone {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+}
+
+.floating-btn.zalo {
+  background: linear-gradient(135deg, #0068ff, #0180ff);
+}
+
+.floating-btn.facebook {
+  background: linear-gradient(135deg, #3b5998, #4267B2);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Hero với ảnh nền tùy chỉnh */
+.hero {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), var(--hero-bg-url);
+  background-size: cover;
+  background-position: center;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 80px 20px;
+}
+
+.hero.has-custom-bg {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), var(--hero-bg-url);
+}
+
+/* Category cards với ảnh */
+.category-card {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  min-height: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  color: white;
+  text-decoration: none;
+  transition: transform 0.3s;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
+  z-index: 1;
+}
+
+.category-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+}
+
+.category-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.category-card p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .floating-contact {
+    right: 15px;
+    bottom: 80px;
+  }
+  
+  .floating-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+}

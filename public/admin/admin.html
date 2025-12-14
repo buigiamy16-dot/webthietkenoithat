@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Furniture CMS</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="admin-container">
+    <aside class="sidebar">
+      <div class="logo"><h2>🏠 Admin Panel</h2></div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="dashboard">📊 Dashboard</a>
+        <a href="#" class="nav-item" data-page="products">📦 Sản phẩm</a>
+        <a href="#" class="nav-item" data-page="posts">📝 Bài viết</a>
+        <a href="#" class="nav-item" data-page="categories">📂 Danh mục</a>
+        <a href="#" class="nav-item" data-page="settings">⚙️ Cài đặt SEO</a>
+        <a href="/" class="nav-item" target="_blank">🌐 Xem website</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="admin-header">
+        <h1 id="pageTitle">Dashboard</h1>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="addProductBtn">➕ Thêm sản phẩm</button>
+        </div>
+      </header>
+
+      <div class="page" id="dashboard-page">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-info"><h3 id="totalProducts">0</h3><p>Tổng sản phẩm</p></div></div>
+          <div class="stat-card"><div class="stat-icon">📂</div><div class="stat-info"><h3 id="totalCategories">0</h3><p>Danh mục</p></div></div>
+          <div class="stat-card"><div class="stat-icon">👁️</div><div class="stat-info"><h3>SEO A+</h3><p>Điểm SEO trung bình</p></div></div>
+          <div class="stat-card"><div class="stat-icon">🚀</div><div class="stat-info"><h3>95+</h3><p>PageSpeed Score</p></div></div>
+        </div>
+        <div class="recent-products"><h2>Sản phẩm gần đây</h2><div id="recentProductsList"></div></div>
+      </div>
+
+      <div class="page" id="products-page" style="display: none;">
+        <div class="products-header">
+          <input type="text" id="searchProducts" placeholder="🔍 Tìm kiếm sản phẩm..." class="search-input">
+        </div>
+        <div class="products-table-container">
+          <table class="data-table">
+            <thead><tr><th>Ảnh</th><th>Tên sản phẩm</th><th>Giá</th><th>Danh mục</th><th>SEO</th><th>Hành động</th></tr></thead>
+            <tbody id="productsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="page" id="posts-page" style="display: none;">
+        <button class="btn btn-primary mb-3" id="addPostBtn">➕ Thêm bài viết mới</button>
+        <div class="posts-table-container">
+          <table class="data-table">
+            <thead><tr><th>Tiêu đề</th><th>Danh mục</th><th>Lượt xem</th><th>Trạng thái</th><th>SEO</th><th>Hành động</th></tr></thead>
+            <tbody id="postsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal" id="postModal">
+        <div class="modal-content modal-large">
+          <div class="modal-header">
+            <h2 id="postModalTitle">Thêm bài viết mới</h2>
+            <button class="modal-close" onclick="closePostModal()">&times;</button>
+          </div>
+          <form id="postForm" class="modal-body">
+            <input type="hidden" id="postId">
+            <div class="form-group"><label>Tiêu đề bài viết *</label><input type="text" id="postTitle" class="form-control" required><small class="form-text">50-60 ký tự cho SEO tốt</small></div>
+            <div class="form-row">
+              <div class="form-group col-6"><label>Danh mục</label><input type="text" id="postCategory" class="form-control"></div>
+              <div class="form-group col-6"><label>Tác giả</label><input type="text" id="postAuthor" class="form-control" value="Admin"></div>
+            </div>
+            <div class="form-group"><label>Mô tả ngắn *</label><textarea id="postExcerpt" class="form-control" rows="2" required></textarea></div>
+            <div class="form-group"><label>Nội dung bài viết *</label><textarea id="postContent" class="form-control" rows="10" required></textarea></div>
+            <div class="form-group"><label>Tags</label><input type="text" id="postTags" class="form-control"></div>
+            <div class="form-group"><label>Ảnh đại diện</label><input type="file" id="postFeaturedImage" class="form-control" accept="image/*"><div id="postImagePreview" class="image-preview-grid"></div></div>
+            <div class="form-check-group"><label class="checkbox-label"><input type="checkbox" id="postPublished" checked><span>Xuất bản ngay</span></label></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="closePostModal()">Hủy</button>
+              <button type="submit" class="btn btn-success">💾 Lưu bài viết</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="page" id="categories-page" style="display: none;">
+        <button class="btn btn-primary mb-3" id="addCategoryBtn">➕ Thêm danh mục</button>
+        <div class="categories-grid" id="categoriesGrid"></div>
+      </div>
+
+      <div class="page" id="settings-page" style="display: none;">
+        <form id="settingsForm" class="settings-form">
+          <h3 style="border-bottom:2px solid #e5e7eb;padding-bottom:0.5rem;margin-bottom:1.5rem">🔍 Cài đặt SEO</h3>
+          <div class="form-group"><label>Tiêu đề website</label><input type="text" id="siteTitle" class="form-control" required><small class="form-text">50-60 ký tự</small></div>
+          <div class="form-group"><label>Mô tả website</label><textarea id="siteDescription" class="form-control" rows="3" required></textarea><small class="form-text">120-160 ký tự</small></div>
+          <div class="form-group"><label>Keywords</label><input type="text" id="keywords" class="form-control" required></div>
+          
+          <h3 style="border-bottom:2px solid #e5e7eb;padding-bottom:0.5rem;margin:2rem 0 1.5rem">📞 Thông tin liên hệ</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Email</label><input type="email" id="email" class="form-control" required></div>
+            <div class="form-group"><label>Số điện thoại</label><input type="tel" id="phone" class="form-control" required></div>
+          </div>
+          <div class="form-group"><label>Địa chỉ</label><input type="text" id="address" class="form-control" required></div>
+          
+          <h3 style="border-bottom:2px solid #e5e7eb;padding-bottom:0.5rem;margin:2rem 0 1.5rem">🎨 Hero Banner</h3>
+          <div class="form-group"><label>Ảnh nền Hero Banner</label><input type="file" id="heroImage" class="form-control" accept="image/*"><small class="form-text">📐 1920x600px | JPG | Max 500KB</small><div id="heroImagePreview" style="margin-top:10px"></div></div>
+          <div class="form-group"><label>Tiêu đề Hero</label><input type="text" id="heroTitle" class="form-control"></div>
+          <div class="form-group"><label>Phụ đề Hero</label><input type="text" id="heroSubtitle" class="form-control"></div>
+          
+          <h3 style="border-bottom:2px solid #e5e7eb;padding-bottom:0.5rem;margin:2rem 0 1.5rem">📱 Nút Liên Hệ Nổi</h3>
+          <div class="form-check-group"><label class="checkbox-label"><input type="checkbox" id="showFloatingButtons"><span>Hiển thị nút liên hệ nổi</span></label></div>
+          <div class="form-row">
+            <div class="form-group"><label>Icon Phone</label><input type="file" id="phoneIcon" class="form-control" accept="image/*"><small class="form-text">📐 64x64px PNG</small><div id="phoneIconPreview" style="margin-top:10px"></div></div>
+            <div class="form-group"><label>Số điện thoại</label><input type="tel" id="floatingPhone" class="form-control"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Icon Zalo</label><input type="file" id="zaloIcon" class="form-control" accept="image/*"><small class="form-text">📐 64x64px PNG</small><div id="zaloIconPreview" style="margin-top:10px"></div></div>
+            <div class="form-group"><label>Số Zalo</label><input type="tel" id="floatingZalo" class="form-control"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Icon Facebook</label><input type="file" id="facebookIcon" class="form-control" accept="image/*"><small class="form-text">📐 64x64px PNG</small><div id="facebookIconPreview" style="margin-top:10px"></div></div>
+            <div class="form-group"><label>Link Facebook</label><input type="url" id="floatingFacebook" class="form-control"></div>
+          </div>
+          
+          <button type="submit" class="btn btn-success btn-lg">💾 Lưu cài đặt</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal" id="productModal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 id="productModalTitle">Thêm sản phẩm</h2>
+        <button class="modal-close" onclick="closeProductModal()">&times;</button>
+      </div>
+      <form id="productForm" class="modal-body">
+        <input type="hidden" id="productId">
+        <div class="form-row">
+          <div class="form-group col-8"><label>Tên sản phẩm *</label><input type="text" id="productName" class="form-control" required></div>
+          <div class="form-group col-4"><label>Mã SKU</label><input type="text" id="productSku" class="form-control"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-4"><label>Giá *</label><input type="number" id="productPrice" class="form-control" required></div>
+          <div class="form-group col-4"><label>Giá cũ</label><input type="number" id="productOldPrice" class="form-control"></div>
+          <div class="form-group col-4"><label>Danh mục *</label><select id="productCategory" class="form-control" required></select></div>
+        </div>
+        <div class="form-group"><label>Mô tả ngắn</label><input type="text" id="productShortDesc" class="form-control"></div>
+        <div class="form-group"><label>Mô tả chi tiết *</label><textarea id="productDescription" class="form-control" rows="5" required></textarea></div>
+        <div class="form-group"><label>Đặc điểm nổi bật</label><textarea id="productFeatures" class="form-control" rows="4"></textarea></div>
+        <div class="form-group"><label>Tags</label><input type="text" id="productTags" class="form-control"></div>
+        <div class="form-group"><label>Hình ảnh</label><input type="file" id="productImages" class="form-control" accept="image/*" multiple><div id="imagePreview" class="image-preview-grid"></div></div>
+        <div class="form-check-group"><label class="checkbox-label"><input type="checkbox" id="productIsNew"><span>Sản phẩm mới</span></label></div>
+        <div class="seo-score-box" id="seoScoreBox" style="display:none"><h3>📊 SEO Score</h3><div class="seo-score"><div class="score-circle"><span id="seoScoreValue">0</span><small>/100</small></div><div class="score-grade" id="seoGrade">D</div></div><div id="seoChecks"></div></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Hủy</button>
+          <button type="button" class="btn btn-warning" onclick="checkSEO()">🔍 Kiểm tra SEO</button>
+          <button type="submit" class="btn btn-success">💾 Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="categoryModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Thêm danh mục</h2>
+        <button class="modal-close" onclick="closeCategoryModal()">&times;</button>
+      </div>
+      <form id="categoryForm" class="modal-body">
+        <input type="hidden" id="categoryId">
+        <div class="form-group"><label>Tên danh mục *</label><input type="text" id="categoryName" class="form-control" required></div>
+        <div class="form-group"><label>Mô tả</label><textarea id="categoryDescription" class="form-control" rows="3"></textarea></div>
+        <div class="form-group"><label>Ảnh danh mục</label><input type="file" id="categoryImage" class="form-control" accept="image/*"><small class="form-text">📐 800x600px | JPG | Max 300KB</small><div id="categoryImagePreview" style="margin-top:10px"></div></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeCategoryModal()">Hủy</button>
+          <button type="submit" class="btn btn-success">💾 Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

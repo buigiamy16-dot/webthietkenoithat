@@ -1,0 +1,113 @@
+===== THÊM VÀO admin.html (SAU PHẦN NÚT LIÊN HỆ) =====
+
+<h3 style="border-bottom:2px solid #e5e7eb;padding-bottom:0.5rem;margin:2rem 0 1.5rem">👥 Footer - Thông Tin Liên Hệ</h3>
+
+<div class="form-group">
+  <label>Ảnh công ty (Footer)</label>
+  <input type="file" id="companyImage" class="form-control" accept="image/*">
+  <small class="form-text">📐 600x400px | JPG | Max 300KB</small>
+  <div id="companyImagePreview" style="margin-top:10px"></div>
+</div>
+
+<div class="form-group">
+  <label>Địa chỉ văn phòng</label>
+  <input type="text" id="officeAddress" class="form-control" placeholder="123 Đường ABC, Quận 1, TP.HCM">
+</div>
+
+<div class="form-group">
+  <label>Giờ làm việc</label>
+  <input type="text" id="workingHours" class="form-control" placeholder="8:00 - 22:00 (Hàng ngày)">
+</div>
+
+<div class="form-group">
+  <label>Link Google Maps</label>
+  <input type="url" id="mapLink" class="form-control" placeholder="https://maps.google.com/...">
+</div>
+
+<h4 style="margin-top:1.5rem;margin-bottom:1rem">Nhân viên 1 (Kinh doanh)</h4>
+<div class="form-row">
+  <div class="form-group"><label>Họ tên</label><input type="text" id="staff1Name" class="form-control" placeholder="Mr. Nguyễn Văn A"></div>
+  <div class="form-group"><label>Chức vụ</label><input type="text" id="staff1Title" class="form-control" placeholder="Phòng Kinh Doanh"></div>
+</div>
+<div class="form-group">
+  <label>Số điện thoại</label>
+  <input type="tel" id="staff1Phone" class="form-control" placeholder="090 123 4567">
+</div>
+
+<h4 style="margin-top:1.5rem;margin-bottom:1rem">Nhân viên 2 (Thiết kế)</h4>
+<div class="form-row">
+  <div class="form-group"><label>Họ tên</label><input type="text" id="staff2Name" class="form-control" placeholder="Mr. Trần Văn B"></div>
+  <div class="form-group"><label>Chức vụ</label><input type="text" id="staff2Title" class="form-control" placeholder="Phòng Thiết Kế"></div>
+</div>
+<div class="form-group">
+  <label>Số điện thoại</label>
+  <input type="tel" id="staff2Phone" class="form-control" placeholder="090 987 6543">
+</div>
+
+
+===== THÊM VÀO admin.js (CUỐI FILE) =====
+
+// Upload company image
+document.getElementById('companyImage')?.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const formData = new FormData();
+  formData.append('companyImage', file);
+  try {
+    const res = await fetch('/api/upload/company', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.path) {
+      settings.companyImage = data.path;
+      document.getElementById('companyImagePreview').innerHTML = `<img src="${data.path}" style="max-width:250px;border-radius:8px">`;
+      showToast('Upload ảnh công ty OK', 'success');
+    }
+  } catch (err) { showToast('Lỗi upload', 'error'); }
+});
+
+
+===== THÊM VÀO server.js (SAU CÁC UPLOAD ENDPOINT) =====
+
+app.post('/api/upload/company', upload.single('companyImage'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'No file' });
+    const seoFilename = createSEOFilename(req.file.originalname, 'company');
+    const outputPath = `./uploads/${seoFilename}`;
+    await sharp(req.file.path).resize(600, 400, { fit: 'cover' }).jpeg({ quality: 85 }).toFile(outputPath);
+    await fs.unlink(req.file.path);
+    res.json({ path: `/uploads/${seoFilename}` });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+===== CẬP NHẬT loadSettings() TRONG admin.js =====
+Thêm vào cuối function loadSettings():
+
+document.getElementById('officeAddress').value = settings.officeAddress || '';
+document.getElementById('workingHours').value = settings.workingHours || '';
+document.getElementById('mapLink').value = settings.mapLink || '';
+document.getElementById('staff1Name').value = settings.staff1Name || '';
+document.getElementById('staff1Title').value = settings.staff1Title || '';
+document.getElementById('staff1Phone').value = settings.staff1Phone || '';
+document.getElementById('staff2Name').value = settings.staff2Name || '';
+document.getElementById('staff2Title').value = settings.staff2Title || '';
+document.getElementById('staff2Phone').value = settings.staff2Phone || '';
+if (settings.companyImage) {
+  document.getElementById('companyImagePreview').innerHTML = `<img src="${settings.companyImage}" style="max-width:250px;border-radius:8px">`;
+}
+
+
+===== CẬP NHẬT submitSettings() TRONG admin.js =====
+Thêm vào object updatedSettings:
+
+companyImage: settings.companyImage || '',
+officeAddress: document.getElementById('officeAddress').value,
+workingHours: document.getElementById('workingHours').value,
+mapLink: document.getElementById('mapLink').value,
+staff1Name: document.getElementById('staff1Name').value,
+staff1Title: document.getElementById('staff1Title').value,
+staff1Phone: document.getElementById('staff1Phone').value,
+staff2Name: document.getElementById('staff2Name').value,
+staff2Title: document.getElementById('staff2Title').value,
+staff2Phone: document.getElementById('staff2Phone').value,

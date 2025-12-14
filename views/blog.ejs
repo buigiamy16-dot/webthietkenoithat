@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <meta name="description" content="<%= description %>">
+  <meta name="keywords" content="<%= keywords %>">
+  <link rel="canonical" href="<%= canonicalUrl %>">
+  
+  <meta property="og:title" content="<%= title %>">
+  <meta property="og:description" content="<%= description %>">
+  <meta property="og:type" content="website">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "<%= title %>",
+    "description": "<%= description %>"
+  }
+  </script>
+</head>
+<body>
+  <%- include('partials/header', { categories, currentPath }) %>
+
+  <main>
+    <div class="container">
+      <div class="blog-header">
+        <h1>📰 Blog & Tin Tức Nội Thất</h1>
+        <p class="blog-subtitle">Cập nhật xu hướng, kiến thức và bí quyết trang trí nội thất</p>
+      </div>
+
+      <div class="blog-grid">
+        <% if (posts.length > 0) { %>
+          <% posts.forEach(post => { %>
+            <article class="blog-card">
+              <a href="/blog/<%= post.slug %>">
+                <% if (post.featuredImage) { %>
+                  <div class="blog-image">
+                    <img src="<%= post.featuredImage %>" 
+                         alt="<%= post.title %>"
+                         loading="lazy"
+                         width="400"
+                         height="250">
+                  </div>
+                <% } %>
+                <div class="blog-content">
+                  <div class="blog-meta">
+                    <span class="blog-category"><%= post.category %></span>
+                    <span class="blog-date">
+                      <%= new Date(post.createdAt).toLocaleDateString('vi-VN') %>
+                    </span>
+                  </div>
+                  <h2><%= post.title %></h2>
+                  <p class="blog-excerpt"><%= post.excerpt %></p>
+                  <div class="blog-footer">
+                    <span class="blog-author">✍️ <%= post.author %></span>
+                    <span class="blog-views">👁️ <%= post.views || 0 %> lượt xem</span>
+                  </div>
+                  <div class="blog-tags">
+                    <% if (post.tags && post.tags.length > 0) { %>
+                      <% post.tags.slice(0, 3).forEach(tag => { %>
+                        <span class="tag">#<%= tag %></span>
+                      <% }) %>
+                    <% } %>
+                  </div>
+                </div>
+              </a>
+            </article>
+          <% }) %>
+        <% } else { %>
+          <div class="no-posts">
+            <p>Chưa có bài viết nào. Vui lòng quay lại sau!</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+  
+  <script src="/js/main.js"></script>
+  
+  <style>
+    .blog-header {
+      text-align: center;
+      margin: 3rem 0;
+    }
+    .blog-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .blog-subtitle {
+      font-size: 1.125rem;
+      color: var(--text-light);
+    }
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .blog-card {
+      background: white;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+    .blog-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .blog-card a {
+      text-decoration: none;
+      color: inherit;
+    }
+    .blog-image {
+      width: 100%;
+      height: 250px;
+      overflow: hidden;
+      background: var(--bg-light);
+    }
+    .blog-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .blog-card:hover .blog-image img {
+      transform: scale(1.05);
+    }
+    .blog-content {
+      padding: 1.5rem;
+    }
+    .blog-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+    .blog-category {
+      background: var(--primary-color);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-weight: 500;
+    }
+    .blog-date {
+      color: var(--text-light);
+    }
+    .blog-content h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+    .blog-excerpt {
+      color: var(--text-light);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .blog-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.875rem;
+      color: var(--text-light);
+    }
+    .blog-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .no-posts {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem;
+      background: var(--bg-light);
+      border-radius: 0.75rem;
+    }
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</body>
+</html>

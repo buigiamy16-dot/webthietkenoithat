@@ -1,0 +1,68 @@
+<footer class="footer-new">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3>Về chúng tôi</h3>
+        <img src="<%= (typeof settings !== 'undefined' && settings.companyImage) ? settings.companyImage : '/images/company-placeholder.jpg' %>" alt="Công ty" class="company-image">
+        <p>Chuyên cung cấp nội thất cao cấp, thiết kế hiện đại cho không gian sống.</p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Liên hệ trực tiếp</h3>
+        <div class="team-member">
+          <div class="member-avatar">👨‍💼</div>
+          <div class="member-info">
+            <strong><%= (typeof settings !== 'undefined' && settings.staff1Name) ? settings.staff1Name : 'Mr. Nguyễn Văn A' %></strong>
+            <p><%= (typeof settings !== 'undefined' && settings.staff1Title) ? settings.staff1Title : 'Phòng Kinh Doanh' %></p>
+            <a href="tel:<%= (typeof settings !== 'undefined' && settings.staff1Phone) ? settings.staff1Phone.replace(/\s/g, '') : '0901234567' %>">📞 <%= (typeof settings !== 'undefined' && settings.staff1Phone) ? settings.staff1Phone : '090 123 4567' %></a>
+          </div>
+        </div>
+        <div class="team-member">
+          <div class="member-avatar">👨‍🎨</div>
+          <div class="member-info">
+            <strong><%= (typeof settings !== 'undefined' && settings.staff2Name) ? settings.staff2Name : 'Mr. Trần Văn B' %></strong>
+            <p><%= (typeof settings !== 'undefined' && settings.staff2Title) ? settings.staff2Title : 'Phòng Thiết Kế' %></p>
+            <a href="tel:<%= (typeof settings !== 'undefined' && settings.staff2Phone) ? settings.staff2Phone.replace(/\s/g, '') : '0909876543' %>">📞 <%= (typeof settings !== 'undefined' && settings.staff2Phone) ? settings.staff2Phone : '090 987 6543' %></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Địa chỉ công ty</h3>
+        <div class="address-box">
+          <p><strong>Văn phòng chính</strong></p>
+          <p>📍 <%= (typeof settings !== 'undefined' && settings.officeAddress) ? settings.officeAddress : '123 Đường ABC, Quận 1, TP.HCM' %></p>
+          <p>🕐 <%= (typeof settings !== 'undefined' && settings.workingHours) ? settings.workingHours : '8:00 - 22:00 (Hàng ngày)' %></p>
+          <p>✉️ <%= (typeof settings !== 'undefined' && settings.email) ? settings.email : 'info@noithat.vn' %></p>
+        </div>
+        <% if (typeof settings !== 'undefined' && settings.mapLink) { %>
+        <div class="map-link">
+          <a href="<%= settings.mapLink %>" target="_blank">🗺️ Xem bản đồ</a>
+        </div>
+        <% } %>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Nội Thất Cao Cấp. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+.footer-new{background:#1f2937;color:#fff;padding:3rem 0 1rem;margin-top:4rem}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;margin-bottom:2rem}
+.footer-col h3{font-size:1.25rem;margin-bottom:1rem;color:#60a5fa}
+.company-image{width:100%;max-width:250px;height:150px;object-fit:cover;border-radius:8px;margin-bottom:1rem;background:#374151}
+.team-member{display:flex;gap:1rem;margin-bottom:1.5rem;padding:1rem;background:rgba(255,255,255,.05);border-radius:8px}
+.member-avatar{font-size:2.5rem}
+.member-info strong{display:block;font-size:1.1rem;margin-bottom:.25rem}
+.member-info p{font-size:.9rem;color:#9ca3af;margin-bottom:.5rem}
+.member-info a{color:#60a5fa;text-decoration:none;font-weight:500}
+.member-info a:hover{color:#93c5fd}
+.address-box{background:rgba(255,255,255,.05);padding:1.25rem;border-radius:8px;margin-bottom:1rem}
+.address-box p{margin-bottom:.75rem}
+.map-link a{display:inline-block;background:#3b82f6;color:#fff;padding:.75rem 1.5rem;border-radius:6px;text-decoration:none;font-weight:500}
+.map-link a:hover{background:#2563eb}
+.footer-bottom{text-align:center;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1);color:#9ca3af}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr}}
+</style>

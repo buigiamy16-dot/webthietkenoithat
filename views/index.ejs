@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <meta name="description" content="<%= description %>">
+  <meta name="keywords" content="<%= keywords %>">
+  <link rel="canonical" href="<%= canonicalUrl %>">
+  <meta property="og:title" content="<%= title %>">
+  <meta property="og:description" content="<%= description %>">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="<%= canonicalUrl %>">
+  <meta property="og:locale" content="vi_VN">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= title %>">
+  <meta name="twitter:description" content="<%= description %>">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <!-- CSS Hero Image & Floating Buttons -->
+  <style>
+  <% if (typeof settings !== 'undefined' && settings.heroImage) { %>
+  .hero {
+    background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('<%= settings.heroImage %>');
+    background-size: cover;
+    background-position: center;
+  }
+  <% } %>
+  
+  .floating-contact {
+    position: fixed;
+    right: 20px;
+    bottom: 100px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .floating-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    font-size: 28px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+  }
+  .floating-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  }
+  .floating-btn.phone {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+  }
+  .floating-btn.zalo {
+    background: linear-gradient(135deg, #0068ff, #0180ff);
+  }
+  .floating-btn.facebook {
+    background: linear-gradient(135deg, #3b5998, #4267B2);
+  }
+  .floating-btn img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  @media (max-width: 768px) {
+    .floating-contact { right: 15px; bottom: 80px; }
+    .floating-btn { width: 50px; height: 50px; font-size: 24px; }
+    .floating-btn img { width: 28px; height: 28px; }
+  }
+  </style>
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "<%= title %>",
+    "url": "<%= canonicalUrl %>",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "<%= canonicalUrl %>/search?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Nội Thất Cao Cấp",
+    "url": "<%= canonicalUrl %>",
+    "logo": "<%= canonicalUrl %>/images/logo.png",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+84-123-456-789",
+      "contactType": "customer service"
+    }
+  }
+  </script>
+</head>
+<body>
+  <%- include('partials/header', { categories, currentPath }) %>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1><%= (typeof settings !== 'undefined' && settings.heroTitle) ? settings.heroTitle : 'Nội Thất Cao Cấp' %></h1>
+        <p class="hero-subtitle"><%= (typeof settings !== 'undefined' && settings.heroSubtitle) ? settings.heroSubtitle : 'Thiết kế đẳng cấp, chất lượng vượt trội' %></p>
+        <p class="hero-description"><%= (typeof settings !== 'undefined' && settings.heroDescription) ? settings.heroDescription : 'Khám phá bộ sưu tập nội thất hiện đại, sang trọng cho ngôi nhà của bạn' %></p>
+        <a href="#products" class="btn-hero">Xem sản phẩm</a>
+      </div>
+    </section>
+
+    <section class="products-section" id="products">
+      <div class="container">
+        <h2>Sản phẩm nổi bật</h2>
+        <p class="section-subtitle">Những sản phẩm được yêu thích nhất</p>
+        
+        <% if (products.length > 0) { %>
+          <div class="product-grid">
+            <% products.forEach(product => { %>
+              <article class="product-card" itemscope itemtype="https://schema.org/Product">
+                <a href="/san-pham/<%= product.slug %>">
+                  <div class="product-image">
+                    <img src="<%= product.images?.[0] || '/images/placeholder.jpg' %>" 
+                         alt="<%= product.name %>" 
+                         itemprop="image"
+                         loading="lazy"
+                         width="300"
+                         height="300">
+                    <% if (product.isNew) { %>
+                      <span class="badge badge-new">Mới</span>
+                    <% } %>
+                    <% if (product.discount) { %>
+                      <span class="badge badge-sale">-<%= product.discount %>%</span>
+                    <% } %>
+                  </div>
+                  <div class="product-info">
+                    <h3 itemprop="name"><%= product.name %></h3>
+                    <div class="product-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                      <span class="price" itemprop="price" content="<%= product.price %>">
+                        <%= product.price?.toLocaleString('vi-VN') || '0' %>đ
+                      </span>
+                      <meta itemprop="priceCurrency" content="VND">
+                      <link itemprop="availability" href="https://schema.org/InStock">
+                      <% if (product.oldPrice && product.oldPrice > product.price) { %>
+                        <span class="old-price"><%= product.oldPrice.toLocaleString('vi-VN') %>đ</span>
+                      <% } %>
+                    </div>
+                    <% if (product.description) { %>
+                      <p class="product-desc"><%= product.description.substring(0, 80) %>...</p>
+                    <% } %>
+                  </div>
+                </a>
+              </article>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="no-products">
+            <p>Chưa có sản phẩm nào. Vui lòng thêm sản phẩm từ <a href="/admin/admin.html">Admin Panel</a>.</p>
+          </div>
+        <% } %>
+      </div>
+    </section>
+
+    <% if (categories.length > 0) { %>
+    <section class="categories-section">
+      <div class="container">
+        <h2>Danh mục sản phẩm</h2>
+        <p class="section-subtitle">Khám phá theo từng danh mục</p>
+        <div class="category-grid">
+          <% categories.forEach(cat => { %>
+            <a href="/danh-muc/<%= cat.slug %>" class="category-card" <% if (cat.image) { %>style="background-image: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2)), url('<%= cat.image %>');"<% } %>>
+              <div class="category-icon">
+                <% if (cat.icon) { %>
+                  <img src="<%= cat.icon %>" alt="<%= cat.name %>" width="48" height="48">
+                <% } else { %>
+                  <span class="category-emoji">🛋️</span>
+                <% } %>
+              </div>
+              <h3><%= cat.name %></h3>
+              <% if (cat.description) { %>
+                <p><%= cat.description %></p>
+              <% } %>
+              <span class="category-arrow">→</span>
+            </a>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+    <% } %>
+
+    <section class="features-section">
+      <div class="container">
+        <h2>Tại sao chọn chúng tôi?</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">✅</div>
+            <h3>Chất lượng cao</h3>
+            <p>Sản phẩm được kiểm tra kỹ lưỡng, đảm bảo chất lượng tốt nhất</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🚚</div>
+            <h3>Giao hàng nhanh</h3>
+            <p>Miễn phí vận chuyển cho đơn hàng trên 5 triệu đồng</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💰</div>
+            <h3>Giá cạnh tranh</h3>
+            <p>Cam kết giá tốt nhất thị trường, hoàn tiền nếu có giá rẻ hơn</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <h3>Bảo hành dài hạn</h3>
+            <p>Bảo hành chính hãng từ 1-5 năm tùy sản phẩm</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="container">
+        <h2>Liên hệ ngay để được tư vấn</h2>
+        <p>Đội ngũ chuyên gia của chúng tôi sẵn sàng hỗ trợ bạn 24/7</p>
+        <div class="cta-buttons">
+          <a href="tel:<%= (typeof settings !== 'undefined' && settings.phone) ? settings.phone.replace(/\s/g, '') : '0123456789' %>" class="btn-cta btn-primary">📞 Gọi ngay</a>
+          <a href="/lien-he" class="btn-cta btn-secondary">✉️ Liên hệ</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+  
+  <% if (typeof settings !== 'undefined' && settings.showFloatingButtons) { %>
+  <div class="floating-contact">
+    <% if (settings.floatingPhone) { %>
+    <a href="tel:<%= settings.floatingPhone.replace(/\s/g, '') %>" class="floating-btn phone" title="Gọi điện">
+      <% if (settings.phoneIcon) { %>
+        <img src="<%= settings.phoneIcon %>" alt="Phone">
+      <% } else { %>
+        📞
+      <% } %>
+    </a>
+    <% } %>
+    
+    <% if (settings.floatingZalo) { %>
+    <a href="https://zalo.me/<%= settings.floatingZalo.replace(/\s/g, '') %>" target="_blank" class="floating-btn zalo" title="Chat Zalo">
+      <% if (settings.zaloIcon) { %>
+        <img src="<%= settings.zaloIcon %>" alt="Zalo">
+      <% } else { %>
+        💬
+      <% } %>
+    </a>
+    <% } %>
+    
+    <% if (settings.floatingFacebook) { %>
+    <a href="<%= settings.floatingFacebook %>" target="_blank" class="floating-btn facebook" title="Facebook">
+      <% if (settings.facebookIcon) { %>
+        <img src="<%= settings.facebookIcon %>" alt="Facebook">
+      <% } else { %>
+        👍
+      <% } %>
+    </a>
+    <% } %>
+  </div>
+  <% } %>
+  
+  <script src="/js/main.js"></script>
+</body>
+</html>
